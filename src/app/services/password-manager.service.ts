@@ -6,6 +6,8 @@ import {
   DocumentReference,
   collectionData,
   DocumentData,
+  updateDoc,
+  doc,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
@@ -23,5 +25,10 @@ export class PasswordManagerService {
   loadSites(): Observable<DocumentData[]> {
     const dbInstance = collection(this.firestone, 'sites');
     return collectionData(dbInstance, { idField: 'id' });
+  }
+
+  updateSite(id: string, data: object): Promise<void> {
+    const docInstance = doc(this.firestone, 'sites', id);
+    return updateDoc(docInstance, data);
   }
 }

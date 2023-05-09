@@ -15,25 +15,37 @@ export class SiteListComponent {
   siteImgURL!: string;
   siteId!: string;
 
-  formState: string = 'Add new';
+  formState: string = 'Add New';
 
   constructor(private passwordManager: PasswordManagerService) {
     this.loadSites();
   }
 
-  onSubmit(values: object): void {
-    this.passwordManager
-      .addSite(values)
-      .then(() => {
-        console.log('Data save Successfully');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
   loadSites() {
     this.allSites = this.passwordManager.loadSites();
+  }
+
+  onSubmit(values: object): void {
+    if (this.formState === 'Add New') {
+      this.passwordManager
+        .addSite(values)
+        .then(() => {
+          console.log('Data saved successfully');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (this.formState === 'Edit') {
+      this.passwordManager
+        .updateSite(this.siteId, values)
+        .then(() => {
+          this.resetForm();
+          console.log('Data updated successfully');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   editSite(siteName: string, siteURL: string, siteImgURL: string, id: string) {
@@ -41,5 +53,16 @@ export class SiteListComponent {
     this.siteURL = siteURL;
     this.siteImgURL = siteImgURL;
     this.siteId = id;
+
+    this.formState = 'Edit';
+  }
+
+  resetForm() {
+    this.siteName = '';
+    this.siteURL = '';
+    this.siteImgURL = '';
+    this.siteId = '';
+
+    this.formState = 'Add New';
   }
 }
