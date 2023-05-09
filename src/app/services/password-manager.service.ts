@@ -8,6 +8,7 @@ import {
   DocumentData,
   updateDoc,
   doc,
+  deleteDoc,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
@@ -30,5 +31,10 @@ export class PasswordManagerService {
   updateSite(id: string, data: object): Promise<void> {
     const docInstance = doc(this.firestone, 'sites', id);
     return updateDoc(docInstance, data);
+  }
+
+  deleteSite(id: string): Promise<void> {
+    const docInstance = doc(this.firestone, 'sites', id);
+    return deleteDoc(docInstance);
   }
 }

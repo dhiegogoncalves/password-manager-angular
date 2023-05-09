@@ -17,30 +17,43 @@ export class SiteListComponent {
 
   formState: string = 'Add New';
 
-  constructor(private passwordManager: PasswordManagerService) {
+  isSuccess: boolean = false;
+  successMessage!: string;
+
+  constructor(private passwordManagerService: PasswordManagerService) {
     this.loadSites();
   }
 
   loadSites() {
-    this.allSites = this.passwordManager.loadSites();
+    this.allSites = this.passwordManagerService.loadSites();
+  }
+
+  showAlert(message: string) {
+    this.isSuccess = true;
+    this.successMessage = message;
+
+    setTimeout(() => {
+      this.isSuccess = false;
+      this.successMessage = '';
+    }, 3000);
   }
 
   onSubmit(values: object): void {
     if (this.formState === 'Add New') {
-      this.passwordManager
+      this.passwordManagerService
         .addSite(values)
         .then(() => {
-          console.log('Data saved successfully');
+          this.showAlert('Data added successfully');
         })
         .catch((err) => {
           console.log(err);
         });
     } else if (this.formState === 'Edit') {
-      this.passwordManager
+      this.passwordManagerService
         .updateSite(this.siteId, values)
         .then(() => {
+          this.showAlert('Data edited successfully');
           this.resetForm();
-          console.log('Data updated successfully');
         })
         .catch((err) => {
           console.log(err);
@@ -55,6 +68,17 @@ export class SiteListComponent {
     this.siteId = id;
 
     this.formState = 'Edit';
+  }
+
+  deleteSite(id: string) {
+    this.passwordManagerService
+      .deleteSite(id)
+      .then(() => {
+        this.showAlert('Data deleted successfully');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   resetForm() {
