@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PasswordManagerService } from 'src/app/services/password-manager.service';
+import { SiteService } from 'src/app/services/site.service';
 
 @Component({
   selector: 'app-site-list',
@@ -20,12 +20,12 @@ export class SiteListComponent {
   isSuccess: boolean = false;
   successMessage!: string;
 
-  constructor(private passwordManagerService: PasswordManagerService) {
+  constructor(private siteService: SiteService) {
     this.loadSites();
   }
 
   loadSites() {
-    this.allSites = this.passwordManagerService.loadSites();
+    this.allSites = this.siteService.loadSites();
   }
 
   showAlert(message: string) {
@@ -40,7 +40,7 @@ export class SiteListComponent {
 
   onSubmit(values: object): void {
     if (this.formState === 'Add New') {
-      this.passwordManagerService
+      this.siteService
         .addSite(values)
         .then(() => {
           this.showAlert('Data added successfully');
@@ -49,7 +49,7 @@ export class SiteListComponent {
           console.log(err);
         });
     } else if (this.formState === 'Edit') {
-      this.passwordManagerService
+      this.siteService
         .updateSite(this.siteId, values)
         .then(() => {
           this.showAlert('Data edited successfully');
@@ -71,7 +71,7 @@ export class SiteListComponent {
   }
 
   deleteSite(id: string) {
-    this.passwordManagerService
+    this.siteService
       .deleteSite(id)
       .then(() => {
         this.showAlert('Data deleted successfully');
