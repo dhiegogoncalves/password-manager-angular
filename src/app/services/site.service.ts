@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class PasswordManagerService {
+export class SiteService {
   constructor(private firestone: Firestore) {}
 
   addSite(data: object): Promise<DocumentReference<object>> {
